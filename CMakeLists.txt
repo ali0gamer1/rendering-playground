@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.23)
 
 project(
   MyGame
@@ -6,6 +6,12 @@ project(
   DESCRIPTION "My first SDL3 Game"
   LANGUAGES CXX
 )
+add_executable(MyGame soser.cpp)
+list(APPEND CMAKE_PREFIX_PATH "C:/Users/Ali/AppData/Local/bin/NASM")
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(
   CMAKE_RUNTIME_OUTPUT_DIRECTORY
   "${CMAKE_BINARY_DIR}/$<CONFIGURATION>"
@@ -16,16 +22,28 @@ set(
   "${CMAKE_BINARY_DIR}/$<CONFIGURATION>"
 )
 
-add_executable(MyProject soser.cpp)
 
-set(SDLTTF_VENDORED ON) 
+if(APPLE)
+  set_target_properties(MyGame PROPERTIES
+    INSTALL_RPATH "@executable_path;@loader_path"
+    BUILD_WITH_INSTALL_RPATH TRUE
+    MACOSX_RPATH TRUE
+  )
+elseif(UNIX)
+  set_target_properties(MyGame PROPERTIES
+    INSTALL_RPATH "$ORIGIN"
+    BUILD_WITH_INSTALL_RPATH TRUE
+  )
+endif()
 
-# Set a variable for our vendor directory
-set(VENDOR_DIR "${PROJECT_SOURCE_DIR}/vendor") 
+if(WIN32)
+  set(MATH_LIBRARY "" CACHE STRING "" FORCE)
+endif()
 
-# Add the SDL libraries from our submodules
-add_subdirectory(${VENDOR_DIR}/SDL) 
-add_subdirectory(${VENDOR_DIR}/SDL_image) 
+set(SDLTTF_VENDORED ON)
+set(VENDOR_DIR "${PROJECT_SOURCE_DIR}/vendor")
+add_subdirectory(${VENDOR_DIR}/SDL)
+add_subdirectory(${VENDOR_DIR}/SDL_image)
 add_subdirectory(${VENDOR_DIR}/SDL_ttf)
 
 target_link_libraries(MyGame 

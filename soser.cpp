@@ -1,26 +1,29 @@
-// main.cpp
-#include <iostream>
-#include <chrono>
-#include <thread>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
+int main(int, char**) {
+  SDL_Init(SDL_INIT_VIDEO);
 
+  SDL_Window* Window{SDL_CreateWindow(
+    "Hello Window", 800, 300, 0
+  )};
+  SDL_GetWindowSurface(Window);
+  SDL_UpdateWindowSurface(Window);
 
-int main(){
-  using namespace std::chrono;
+  bool IsRunning = true;
+  SDL_Event Event;
+  while (IsRunning) {
+    while (SDL_PollEvent(&Event)) {
+      if (Event.type == SDL_EVENT_QUIT) {
+        IsRunning = false;
+      }
+    }
+  }
 
-  time_point StartTime{
-    system_clock::now()
-  };
+  SDL_DestroyWindow(Window);
+  SDL_Quit();
 
-  std::this_thread::sleep_for(seconds(2));
-
-  time_point EndTime{
-    system_clock::now()
-  };
-
-  duration RunningTime{
-    EndTime - StartTime
-  };
-
-
+  return 0;
 }
