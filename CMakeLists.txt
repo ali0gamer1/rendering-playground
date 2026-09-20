@@ -6,11 +6,18 @@ project(
   DESCRIPTION "My first SDL3 Game"
   LANGUAGES CXX
 )
-add_executable(MyGame soser.cpp)
+add_executable(
+  MyGame
+  soser.cpp
+  app.cpp
+  Window.cpp
+  util.cpp
+  Renderer.cpp
+)
+target_compile_features(MyGame PRIVATE cxx_std_20)
 list(APPEND CMAKE_PREFIX_PATH "C:/Users/Ali/AppData/Local/bin/NASM")
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 set(
   CMAKE_RUNTIME_OUTPUT_DIRECTORY
